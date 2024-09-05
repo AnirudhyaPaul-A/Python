@@ -1,0 +1,309 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure for circular doubly linked list
+struct Node {
+    int data;
+    struct Node* next;
+    struct Node* prev;
+};
+
+// Function prototypes
+struct Node* createNode(int data);
+void displayList(struct Node* head);
+void insertAtBeginning(struct Node** head, int data);
+void insertAtEnd(struct Node** head, int data);
+void insertAfterNode(struct Node** head, int afterData, int newData);
+void deleteFromBeginning(struct Node** head);
+void deleteFromEnd(struct Node** head);
+void deleteAfterNode(struct Node** head, int afterData);
+void deleteList(struct Node** head);
+
+int main() {
+    struct Node* head = NULL;
+    int choice, data, newData;
+    char ch;
+
+    do {
+        printf("\nCircular Doubly Linked List Menu:\n");
+        printf("1. Create a circular doubly linked list\n");
+        printf("2. Display the elements\n");
+        printf("3. Insert at the beginning\n");
+        printf("4. Insert at the end\n");
+        printf("5. Insert after a given node\n");
+        printf("6. Delete from the beginning\n");
+        printf("7. Delete from the end\n");
+        printf("8. Delete after a given node\n");
+        printf("9. Delete the entire list\n");
+        printf("0. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                // Create a circular doubly linked list
+                printf("Enter data for the first node: ");
+                scanf("%d", &data);
+                head = createNode(data);
+                head->next = head;
+                head->prev = head;
+                break;
+
+            case 2:
+                // Display the elements
+                displayList(head);
+                break;
+
+            case 3:
+                // Insert at the beginning
+                printf("Enter data to insert at the beginning: ");
+                scanf("%d", &data);
+                insertAtBeginning(&head, data);
+                break;
+
+            case 4:
+                // Insert at the end
+                printf("Enter data to insert at the end: ");
+                scanf("%d", &data);
+                insertAtEnd(&head, data);
+                break;
+
+            case 5:
+                // Insert after a given node
+                printf("Enter data of the node after which insertion should occur: ");
+                scanf("%d", &data);
+                printf("Enter data to insert: ");
+                scanf("%d", &newData);
+                insertAfterNode(&head, data, newData);
+                break;
+
+            case 6:
+                // Delete from the beginning
+                deleteFromBeginning(&head);
+                break;
+
+            case 7:
+                // Delete from the end
+                deleteFromEnd(&head);
+                break;
+
+            case 8:
+                // Delete after a given node
+                printf("Enter data of the node after which deletion should occur: ");
+                scanf("%d", &data);
+                deleteAfterNode(&head, data);
+                break;
+
+            case 9:
+                // Delete the entire list
+                deleteList(&head);
+                break;
+
+            case 0:
+                // Exit
+                printf("Exiting the program.\n");
+                break;
+
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+
+        printf("\nDo you want to continue? (y/n): ");
+        scanf(" %c", &ch);
+
+    } while (ch == 'y' || ch == 'Y');
+
+    return 0;
+}
+
+// Function to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed.\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->next = NULL;
+    newNode->prev = NULL;
+    return newNode;
+}
+
+// Function to display the circular doubly linked list
+void displayList(struct Node* head) {
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    struct Node* current = head;
+
+    printf("Circular Doubly Linked List: ");
+    do {
+        printf("%d <-> ", current->data);
+        current = current->next;
+    } while (current != head);
+    printf("(head)\n");
+}
+
+// Function to insert a node at the beginning of the list
+void insertAtBeginning(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        newNode->next = *head;
+        newNode->prev = *head;
+    } else {
+        newNode->next = *head;
+        newNode->prev = (*head)->prev;
+        (*head)->prev->next = newNode;
+        (*head)->prev = newNode;
+        *head = newNode;
+    }
+    printf("Node inserted at the beginning.\n");
+}
+
+// Function to insert a node at the end of the list
+void insertAtEnd(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        newNode->next = *head;
+        newNode->prev = *head;
+    } else {
+        newNode->next = *head;
+        newNode->prev = (*head)->prev;
+        (*head)->prev->next = newNode;
+        (*head)->prev = newNode;
+    }
+    printf("Node inserted at the end.\n");
+}
+
+// Function to insert a node after a given node
+void insertAfterNode(struct Node** head, int afterData, int newData) {
+    if (*head == NULL) {
+        printf("List is empty. Cannot insert after a node.\n");
+        return;
+    }
+
+    struct Node* current = *head;
+
+    // Find the node with the given data
+    while (current->data != afterData) {
+        current = current->next;
+
+        // If we reach the head again, the given node is not in the list
+        if (current == *head) {
+            printf("Node with data %d not found in the list.\n", afterData);
+            return;
+        }
+    }
+
+    // Create a new node
+    struct Node* newNode = createNode(newData);
+
+    // Insert the new node after the found node
+    newNode->next = current->next;
+    newNode->prev = current;
+    current->next->prev = newNode;
+    current->next = newNode;
+
+    printf("Node with data %d inserted after the node with data %d.\n", newData, afterData);
+}
+
+// Function to delete a node from the beginning
+void deleteFromBeginning(struct Node** head) {
+    if (*head == NULL) {
+        printf("List is empty. Deletion not possible.\n");
+        return;
+    }
+
+    struct Node* temp = *head;
+    if ((*head)->next == *head) {
+        // Only one node in the list
+        free(temp);
+        *head = NULL;
+    } else {
+        (*head)->prev->next = (*head)->next;
+        (*head)->next->prev = (*head)->prev;
+        *head = (*head)->next;
+        free(temp);
+    }
+
+    printf("Node deleted from the beginning.\n");
+}
+
+// Function to delete a node from the end
+void deleteFromEnd(struct Node** head) {
+    if (*head == NULL) {
+        printf("List is empty. Deletion not possible.\n");
+        return;
+    }
+
+    struct Node* temp = (*head)->prev;
+    if ((*head)->next == *head) {
+        // Only one node in the list
+        free(temp);
+        *head = NULL;
+    } else {
+        (*head)->prev = temp->prev;
+        temp->prev->next = *head;
+        free(temp);
+    }
+
+    printf("Node deleted from the end.\n");
+}
+
+// Function to delete a node after a given node
+void deleteAfterNode(struct Node** head, int afterData) {
+    if (*head == NULL) {
+        printf("List is empty. Cannot delete after a node.\n");
+        return;
+    }
+
+    struct Node* current = *head;
+
+    // Find the node with the given data
+    while (current->data != afterData) {
+        current = current->next;
+
+        // If we reach the head again, the given node is not in the list
+        if (current == *head) {
+            printf("Node with data %d not found in the list.\n", afterData);
+            return;
+        }
+    }
+
+    // Check if the node after the given node exists
+    if (current->next == *head) {
+        printf("No node to delete after the node with data %d.\n", afterData);
+        return;
+    }
+
+    struct Node* temp = current->next;
+    current->next = temp->next;
+    temp->next->prev = current;
+    free(temp);
+
+    printf("Node deleted after the node with data %d.\n", afterData);
+}
+
+// Function to delete the entire list
+void deleteList(struct Node** head) {
+    if (*head == NULL) {
+        printf("List is already empty.\n");
+        return;
+    }
+
+    struct Node* current = *head;
+    struct Node* nextNode;
+
+    do {
+        nextNode = current->next;
+        free(current);
+        current = nextNode;
+    } while (current != *head);
+
+    *head = NULL;
+    printf("Entire list deleted.\n");
+}

@@ -1,0 +1,47 @@
+#include <stdio.h>
+
+// Function prototype
+void updateArray(int arr[], int size);
+
+int main() {
+    int myArray[] = {1, 2, 3, 4, 5};
+    int size = sizeof(myArray) / sizeof(myArray[0]);
+
+    printf("Array elements before function call in main:\n");
+    for (int i = 0; i < size; i++) {
+        printf("%d ", myArray[i]);
+    }
+    printf("\n");
+
+    // Passing array to function by reference
+    updateArray(myArray, size);
+
+    printf("Array elements after function call in main:\n");
+    for (int i = 0; i < size; i++) {
+        printf("%d ", myArray[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+
+// Function to update array elements
+void updateArray(int arr[], int size) {
+    printf("Array elements inside the function:\n");
+    for (int i = 0; i < size; i++) {
+        // Updating array elements
+        arr[i] = arr[i] * 2;
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+
+OUTPUT
+
+Array elements before function call in main:
+1 2 3 4 5 
+Array elements inside the function:
+2 4 6 8 10 
+Array elements after function call in main:
+2 4 6 8 10 

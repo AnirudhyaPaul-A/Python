@@ -1,0 +1,120 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+// Structure to represent a stack node
+struct StackNode {
+    int data;
+    struct StackNode* next;
+};
+
+// Function prototypes
+struct StackNode* createNode(int data);
+void push(struct StackNode** top, int data);
+int pop(struct StackNode** top);
+int evaluatePrefixExpression(char* expression);
+
+int main() {
+    char expression[100];
+
+    // Input the prefix expression
+    printf("Enter the prefix expression: ");
+    scanf("%s", expression);
+
+    // Evaluate the prefix expression
+    int result = evaluatePrefixExpression(expression);
+
+    // Display the result
+    printf("Result of the prefix expression: %d\n", result);
+
+    return 0;
+}
+
+// Function to create a new stack node
+struct StackNode* createNode(int data) {
+    struct StackNode* newNode = (struct StackNode*)malloc(sizeof(struct StackNode));
+    if (newNode == NULL) {
+        printf("Memory allocation failed.\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to push a value onto the stack
+void push(struct StackNode** top, int data) {
+    struct StackNode* newNode = createNode(data);
+    newNode->next = *top;
+    *top = newNode;
+}
+
+// Function to pop a value from the stack
+int pop(struct StackNode** top) {
+    if (*top == NULL) {
+        printf("Stack underflow.\n");
+        exit(1);
+    }
+
+    int data = (*top)->data;
+    struct StackNode* temp = *top;
+    *top = (*top)->next;
+    free(temp);
+    return data;
+}
+
+// Function to evaluate a prefix expression
+int evaluatePrefixExpression(char* expression) {
+    struct StackNode* stack = NULL;
+
+    // Reverse the expression to simplify processing
+    int length = 0;
+    while (expression[length] != '\0') {
+        length++;
+    }
+
+    for (int i = length - 1; i >= 0; i--) {
+        if (isdigit(expression[i])) {
+            // If the character is a digit, push it onto the stack
+            push(&stack, expression[i] - '0');
+        } else {
+            // If the character is an operator, pop two operands from the stack, perform the operation, and push the result back
+            int operand1 = pop(&stack);
+            int operand2 = pop(&stack);
+
+            switch (expression[i]) {
+                case '+':
+                    push(&stack, operand1 + operand2);
+                    break;
+                case '-':
+                    push(&stack, operand1 - operand2);
+                    break;
+                case '*':
+                    push(&stack, operand1 * operand2);
+                    break;
+                case '/':
+                    push(&stack, operand1 / operand2);
+                    break;
+                default:
+                    printf("Invalid operator: %c\n", expression[i]);
+                    exit(1);
+            }
+        }
+    }
+
+    // The final result should be on the top of the stack
+    if (stack == NULL) {
+        printf("Invalid expression.\n");
+        exit(1);
+    }
+
+    int result = pop(&stack);
+
+    // Ensure that the stack is empty after evaluation
+    if (stack != NULL) {
+        printf("Invalid expression.\n");
+        exit(1);
+    }
+
+    return result;
+}

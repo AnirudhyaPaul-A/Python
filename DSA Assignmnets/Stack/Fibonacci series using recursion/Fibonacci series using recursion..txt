@@ -1,0 +1,48 @@
+Write a program to print the Fibonacci series using recursion.
+
+
+#include <stdio.h>
+
+// Function to calculate Fibonacci series using recursion
+int fibonacci(int n) {
+    if (n <= 1) {
+        return n;
+    } else {
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+}
+
+// Function to print Fibonacci series up to a given limit
+void printFibonacciSeries(int limit) {
+    printf("Fibonacci Series up to %d terms:\n", limit);
+
+    for (int i = 0; i < limit; i++) {
+        printf("%d ", fibonacci(i));
+    }
+
+    printf("\n");
+}
+
+int main() {
+    int n;
+
+    printf("Enter the number of terms for Fibonacci series: ");
+    scanf("%d", &n);
+
+    if (n <= 0) {
+        printf("Please enter a positive integer for the number of terms.\n");
+        return 1; // Exit with an error code
+    }
+
+    printFibonacciSeries(n);
+
+    return 0; // Exit successfully
+}
+
+
+
+OUTPUT
+
+Enter the number of terms for Fibonacci series: 8
+Fibonacci Series up to 8 terms:
+0 1 1 2 3 5 8 13

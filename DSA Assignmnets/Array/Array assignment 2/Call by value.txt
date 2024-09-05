@@ -1,0 +1,51 @@
+#include <stdio.h>
+
+// Function to update array elements
+void updateArray(int arr[], int size) {
+    // Modify array elements
+    for (int i = 0; i < size; i++) {
+        arr[i] *= 2;
+    }
+
+    // Print array elements inside the function
+    printf("Array elements inside the function:\n");
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    // Declare and initialize an array
+    int myArray[] = {1, 2, 3, 4, 5};
+    int size = sizeof(myArray) / sizeof(myArray[0]);
+
+    // Print array elements before calling the function
+    printf("Array elements before calling the function:\n");
+    for (int i = 0; i < size; i++) {
+        printf("%d ", myArray[i]);
+    }
+    printf("\n");
+
+    // Call the function with the array
+    updateArray(myArray, size);
+
+    // Print array elements after calling the function
+    printf("Array elements after calling the function:\n");
+    for (int i = 0; i < size; i++) {
+        printf("%d ", myArray[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+
+
+OUTPUT
+
+Array elements before calling the function:
+1 2 3 4 5
+Array elements inside the function:
+2 4 6 8 10
+Array elements after calling the function:
+2 4 6 8 10

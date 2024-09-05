@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int *arr;
+    int size, newSize, i;
+
+    // Get the initial size of the array
+    printf("Enter the initial size of the array: ");
+    scanf("%d", &size);
+
+    // Allocate memory using calloc
+    arr = (int *)calloc(size, sizeof(int));
+
+    // Check if memory allocation was successful
+    if (arr == NULL) {
+        printf("Memory allocation failed. Exiting program.\n");
+        return 1;
+    }
+
+    // Input values into the array
+    printf("Enter %d elements:\n", size);
+    for (i = 0; i < size; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    // Display the original array
+    printf("Original array elements:\n");
+    for (i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    // Get the new size for reallocation
+    printf("Enter the new size of the array: ");
+    scanf("%d", &newSize);
+
+    // Reallocate memory using realloc
+    arr = (int *)realloc(arr, newSize * sizeof(int));
+
+    // Check if reallocation was successful
+    if (arr == NULL) {
+        printf("Memory reallocation failed. Exiting program.\n");
+        return 1;
+    }
+
+    // Input values into the additional elements
+    printf("Enter %d additional elements:\n", newSize - size);
+    for (i = size; i < newSize; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    // Display the elements after reallocation
+    printf("Array elements after reallocation:\n");
+    for (i = 0; i < newSize; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    // Free allocated memory
+    free(arr);
+
+    return 0;
+}
+
+
+OUTPUT
+
+Enter the initial size of the array: 3
+Enter 3 elements:
+10 20 30
+Original array elements:
+10 20 30
+Enter the new size of the array: 5
+Enter 2 additional elements:
+40 50
+Array elements after reallocation:
+10 20 30 40 50

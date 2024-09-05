@@ -1,0 +1,125 @@
+Write a Menu driven C program to accomplish the following functionalities in Circular
+Queue using Array:
+i. Insert an element into the circular queue.
+j. Delete an element from the circular queue.
+k. Return the value of the FRONT element of the circular queue (without deleting it
+from the queue).
+l. Display the elements of a circular queue using the circular queue.
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_SIZE 5
+
+struct CircularQueue {
+    int items[MAX_SIZE];
+    int front, rear;
+};
+
+void initializeQueue(struct CircularQueue *queue) {
+    queue->front = -1;
+    queue->rear = -1;
+}
+
+int isFull(struct CircularQueue *queue) {
+    return (queue->front == 0 && queue->rear == MAX_SIZE - 1) || (queue->front == queue->rear + 1);
+}
+
+int isEmpty(struct CircularQueue *queue) {
+    return queue->front == -1;
+}
+
+void enqueue(struct CircularQueue *queue, int value) {
+    if (isFull(queue)) {
+        printf("Queue is full. Cannot enqueue.\n");
+    } else {
+        if (queue->front == -1) {
+            queue->front = 0;
+        }
+        queue->rear = (queue->rear + 1) % MAX_SIZE;
+        queue->items[queue->rear] = value;
+        printf("Enqueued: %d\n", value);
+    }
+}
+
+void dequeue(struct CircularQueue *queue) {
+    if (isEmpty(queue)) {
+        printf("Queue is empty. Cannot dequeue.\n");
+    } else {
+        printf("Dequeued: %d\n", queue->items[queue->front]);
+        if (queue->front == queue->rear) {
+            initializeQueue(queue);
+        } else {
+            queue->front = (queue->front + 1) % MAX_SIZE;
+        }
+    }
+}
+
+void displayFront(struct CircularQueue *queue) {
+    if (isEmpty(queue)) {
+        printf("Queue is empty.\n");
+    } else {
+        printf("Front element: %d\n", queue->items[queue->front]);
+    }
+}
+
+void displayQueue(struct CircularQueue *queue) {
+    if (isEmpty(queue)) {
+        printf("Queue is empty.\n");
+    } else {
+        printf("Elements in the circular queue: ");
+        int i = queue->front;
+        do {
+            printf("%d ", queue->items[i]);
+            i = (i + 1) % MAX_SIZE;
+        } while (i != (queue->rear + 1) % MAX_SIZE);
+        printf("\n");
+    }
+}
+
+int main() {
+    struct CircularQueue queue;
+    initializeQueue(&queue);
+
+    int choice, value;
+
+    do {
+        printf("\nCircular Queue Menu:\n");
+        printf("1. Enqueue\n");
+        printf("2. Dequeue\n");
+        printf("3. Display Front\n");
+        printf("4. Display Queue\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter the value to enqueue: ");
+                scanf("%d", &value);
+                enqueue(&queue, value);
+                break;
+            case 2:
+                dequeue(&queue);
+                break;
+            case 3:
+                displayFront(&queue);
+                break;
+            case 4:
+                displayQueue(&queue);
+                break;
+            case 5:
+                printf("Exiting the program.\n");
+                break;
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+    } while (choice != 5);
+
+    return 0;
+}
+
+
+

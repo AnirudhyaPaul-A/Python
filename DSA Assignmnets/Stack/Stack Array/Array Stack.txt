@@ -1,0 +1,164 @@
+
+Write a Menu driven C program to accomplish the following functionalities in Stack using
+an Array:
+a. Insert an element into the stack using an array (Push Operation).
+b. Delete an element from the stack using an array (Pop Operation).
+c. Return the value of the topmost element of the stack (without deleting it from the
+stack) using an array.
+d. Display the elements of a stack using an array.
+
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_SIZE 10
+
+int stack[MAX_SIZE];
+int top = -1;
+
+void push(int element) {
+    if (top == MAX_SIZE - 1) {
+        printf("Stack Overflow. Cannot push more elements.\n");
+    } else {
+        stack[++top] = element;
+        printf("Element %d pushed into the stack.\n", element);
+    }
+}
+
+void pop() {
+    if (top == -1) {
+        printf("Stack Underflow. Cannot pop from an empty stack.\n");
+    } else {
+        printf("Element %d popped from the stack.\n", stack[top--]);
+    }
+}
+
+void peek() {
+    if (top == -1) {
+        printf("Stack is empty.\n");
+    } else {
+        printf("Top element of the stack: %d\n", stack[top]);
+    }
+}
+
+void display() {
+    if (top == -1) {
+        printf("Stack is empty.\n");
+    } else {
+        printf("Elements of the stack: ");
+        for (int i = 0; i <= top; ++i) {
+            printf("%d ", stack[i]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int choice, element;
+
+    do {
+        printf("\nStack Menu:\n");
+        printf("1. Push\n");
+        printf("2. Pop\n");
+        printf("3. Peek\n");
+        printf("4. Display\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter the element to push: ");
+                scanf("%d", &element);
+                push(element);
+                break;
+            case 2:
+                pop();
+                break;
+            case 3:
+                peek();
+                break;
+            case 4:
+                display();
+                break;
+            case 5:
+                printf("Exiting the program.\n");
+                break;
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+    } while (choice != 5);
+
+    return 0;
+}
+
+
+OUTPUT
+
+
+Stack Menu:
+1. Push
+2. Pop
+3. Peek
+4. Display
+5. Exit
+Enter your choice: 1
+Enter the element to push: 10
+Element 10 pushed into the stack.
+
+Stack Menu:
+1. Push
+2. Pop
+3. Peek
+4. Display
+5. Exit
+Enter your choice: 1
+Enter the element to push: 20
+Element 20 pushed into the stack.
+
+Stack Menu:
+1. Push
+2. Pop
+3. Peek
+4. Display
+5. Exit
+Enter your choice: 4
+Elements of the stack: 10 20
+
+Stack Menu:
+1. Push
+2. Pop
+3. Peek
+4. Display
+5. Exit
+Enter your choice: 3
+Top element of the stack: 20
+
+Stack Menu:
+1. Push
+2. Pop
+3. Peek
+4. Display
+5. Exit
+Enter your choice: 2
+Element 20 popped from the stack.
+
+Stack Menu:
+1. Push
+2. Pop
+3. Peek
+4. Display
+5. Exit
+Enter your choice: 4
+Elements of the stack: 10
+
+Stack Menu:
+1. Push
+2. Pop
+3. Peek
+4. Display
+5. Exit
+Enter your choice: 5
+Exiting the program.

@@ -1,0 +1,65 @@
+#include <stdio.h>
+
+#define MAX_ROWS 100
+#define MAX_COLS 100
+
+void readMatrix(int matrix[MAX_ROWS][MAX_COLS], int rows, int cols) {
+    printf("Enter the elements of the matrix:\n");
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            scanf("%d", &matrix[i][j]);
+        }
+    }
+}
+
+void displayMatrix(int matrix[MAX_ROWS][MAX_COLS], int rows, int cols) {
+    printf("Matrix:\n");
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            printf("%d\t", matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void convertToSparseMatrix(int matrix[MAX_ROWS][MAX_COLS], int rows, int cols) {
+    int sparseMatrix[MAX_ROWS * MAX_COLS][3]; // Assuming maximum possible non-zero elements
+    int k = 0;
+
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            if (matrix[i][j] != 0) {
+                sparseMatrix[k][0] = i;
+                sparseMatrix[k][1] = j;
+                sparseMatrix[k][2] = matrix[i][j];
+                ++k;
+            }
+        }
+    }
+
+    sparseMatrix[0][2] = k; // Store the number of non-zero elements in the first row
+
+    printf("\nSparse Matrix:\n");
+    for (int i = 0; i < k + 1; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            printf("%d\t", sparseMatrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int matrix[MAX_ROWS][MAX_COLS];
+    int rows, cols;
+
+    printf("Enter the number of rows and columns of the matrix: ");
+    scanf("%d %d", &rows, &cols);
+
+    readMatrix(matrix, rows, cols);
+
+    displayMatrix(matrix, rows, cols);
+
+    convertToSparseMatrix(matrix, rows, cols);
+
+    return 0;
+}

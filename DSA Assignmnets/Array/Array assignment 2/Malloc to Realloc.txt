@@ -1,0 +1,72 @@
+Write a program to allocate memory using malloc( ) and then reallocate the previously
+allocated memory using realloc( ). Display the elements which have been taken after
+reallocation.
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int initialSize = 5;
+    int newSize = 8;
+
+    // Allocate memory using malloc
+    int *arr = (int *)malloc(initialSize * sizeof(int));
+
+    if (arr == NULL) {
+        printf("Memory allocation failed.\n");
+        return 1;  // Exit with an error code
+    }
+
+    // Initialize the array elements
+    printf("Enter %d elements:\n", initialSize);
+    for (int i = 0; i < initialSize; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    // Display the elements before reallocation
+    printf("Elements before reallocation:\n");
+    for (int i = 0; i < initialSize; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    // Reallocate memory using realloc
+    arr = (int *)realloc(arr, newSize * sizeof(int));
+
+    if (arr == NULL) {
+        printf("Memory reallocation failed.\n");
+        return 1;  // Exit with an error code
+    }
+
+    // Initialize the additional elements after reallocation
+    printf("Enter %d additional elements:\n", newSize - initialSize);
+    for (int i = initialSize; i < newSize; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    // Display the elements after reallocation
+    printf("Elements after reallocation:\n");
+    for (int i = 0; i < newSize; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    // Free allocated memory
+    free(arr);
+
+    return 0;  // Exit successfully
+}
+
+
+
+OUTPUT 
+
+Enter 5 elements:
+1 2 3 4 5
+Elements before reallocation:
+1 2 3 4 5 
+Enter 3 additional elements:
+6 7 8
+Elements after reallocation:
+1 2 3 4 5 6 7 8 
